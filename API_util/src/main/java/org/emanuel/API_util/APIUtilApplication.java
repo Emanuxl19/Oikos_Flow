@@ -1,0 +1,13 @@
+package org.emanuel.API_util; // Certifique-se de que o pacote está correto
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class APIUtilApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(APIUtilApplication.class, args);
+    }
+
+}
