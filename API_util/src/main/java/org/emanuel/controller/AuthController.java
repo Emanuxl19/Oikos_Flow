@@ -10,6 +10,7 @@ import org.emanuel.repository.UsuarioRepository;
 import org.emanuel.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,6 +26,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
         if (usuarioRepository.existsByEmail(req.getEmail())) {
             return ResponseEntity.badRequest().body(Map.of("erro", "Email ja cadastrado"));
@@ -36,8 +38,8 @@ public class AuthController {
                 .senha(passwordEncoder.encode(req.getSenha()))
                 .build();
 
-        usuarioRepository.save(usuario);
         String token = jwtUtil.generateToken(usuario);
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok(new AuthResponse(token, usuario.getNome(), usuario.getEmail()));
     }
 

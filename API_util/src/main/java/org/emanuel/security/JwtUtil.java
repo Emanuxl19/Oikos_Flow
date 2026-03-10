@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 @Component
@@ -20,7 +23,34 @@ public class JwtUtil {
     private long expiration;
 
     private SecretKey getKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("JWT secret nao configurado");
+        }
+
+        byte[] keyBytes = tryDecodeBase64(secret);
+        if (keyBytes == null || keyBytes.length < 32) {
+            // Aceita segredo em texto puro (ex.: variavel de ambiente simples).
+            keyBytes = sha256(secret);
+        }
+
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private byte[] tryDecodeBase64(String value) {
+        try {
+            return Decoders.BASE64.decode(value);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    private byte[] sha256(String value) {
+        try {
+            return MessageDigest.getInstance("SHA-256")
+                    .digest(value.getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Algoritmo SHA-256 indisponivel", e);
+        }
     }
 
     public String generateToken(UserDetails userDetails) {
