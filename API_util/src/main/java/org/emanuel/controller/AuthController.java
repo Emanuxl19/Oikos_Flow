@@ -9,12 +9,11 @@ import org.emanuel.model.Usuario;
 import org.emanuel.repository.UsuarioRepository;
 import org.emanuel.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,7 +23,6 @@ public class AuthController {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final AuthenticationManager authManager;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
@@ -45,16 +43,36 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req) {
-        try {
-            authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(req.getEmail(), req.getSenha())
-            );
-        } catch (Exception e) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(req.getEmail());
+        if (optionalUsuario.isEmpty()) {
             return ResponseEntity.status(401).body(Map.of("erro", "Email ou senha invalidos"));
         }
 
-        Usuario usuario = usuarioRepository.findByEmail(req.getEmail()).orElseThrow();
+        Usuario usuario = optionalUsuario.get();
+        String senhaDigitada = req.getSenha();
+        String senhaArmazenada = usuario.getSenha();
+
+        boolean senhaValida;
+        if (isBcryptHash(senhaArmazenada)) {
+            senhaValida = passwordEncoder.matches(senhaDigitada, senhaArmazenada);
+        } else {
+            // Compatibilidade com base antiga sem hash; migra para BCrypt apos login valido.
+            senhaValida = senhaDigitada.equals(senhaArmazenada);
+            if (senhaValida) {
+                usuario.setSenha(passwordEncoder.encode(senhaDigitada));
+                usuarioRepository.save(usuario);
+            }
+        }
+
+        if (!senhaValida) {
+            return ResponseEntity.status(401).body(Map.of("erro", "Email ou senha invalidos"));
+        }
+
         String token = jwtUtil.generateToken(usuario);
         return ResponseEntity.ok(new AuthResponse(token, usuario.getNome(), usuario.getEmail()));
+    }
+
+    private boolean isBcryptHash(String senha) {
+        return senha != null && (senha.startsWith("$2a$") || senha.startsWith("$2b$") || senha.startsWith("$2y$"));
     }
 }
