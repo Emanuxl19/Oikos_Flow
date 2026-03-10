@@ -1,15 +1,10 @@
-# Maven / Java build output
-API_util/target/
+# Java / Maven
+**/target/
 *.class
 *.jar
 *.war
 
-# Logs
-*.log
-hs_err_pid*.log
-replay_pid*.log
-
-# Node / Angular
+# Frontend
 frontend/node_modules/
 frontend/dist/
 frontend/.angular/cache/
@@ -19,10 +14,12 @@ frontend/.angular/cache/
 .idea/
 *.iml
 
-# Claude
-.claude/
+# Logs
+*.log
+hs_err_pid*.log
+replay_pid*.log
 
-# Environment / secrets
+# Secrets locais
 *.env
 API_util/src/main/resources/application.properties
 API_util/src/main/resources/application-local.properties
