@@ -24,3 +24,5 @@ frontend/.angular/cache/
 
 # Environment / secrets
 *.env
+API_util/src/main/resources/application.properties
+API_util/src/main/resources/application-local.properties

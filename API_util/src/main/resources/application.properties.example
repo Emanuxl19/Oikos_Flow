@@ -1,0 +1,36 @@
+# =============================================
+# Copie este arquivo para application.properties
+# e preencha com seus valores reais
+# =============================================
+
+# PostgreSQL
+spring.datasource.url=jdbc:postgresql://localhost:5432/gestor_lab
+spring.datasource.driverClassName=org.postgresql.Driver
+spring.datasource.username=xxxxxxxx
+spring.datasource.password=xxxxxxxx
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.format_sql=true
+
+spring.jackson.serialization.write-dates-as-timestamps=false
+spring.jackson.time-zone=America/Sao_Paulo
+
+app.cors.allowed-origins=http://localhost:4200
+
+# AI Provider: claude | openai | gemini | ollama | none
+ai.provider=none
+ai.api.key=
+ai.model=
+ai.base-url=
+ai.ollama-url=http://localhost:11434
+
+# Telegram Bot
+telegram.bot.token=
+telegram.chat.id=
+
+app.lembrete.intervalo-ms=60000
+
+# JWT (gere uma chave base64 de 256 bits)
+jwt.secret=xxxxxxxxxxxxxx
+jwt.expiration=86400000
