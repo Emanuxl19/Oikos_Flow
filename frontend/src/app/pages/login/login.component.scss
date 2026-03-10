@@ -1,0 +1,63 @@
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3f51b5 0%, #673ab7 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px;
+}
+
+.auth-header {
+  text-align: center;
+  width: 100%;
+  padding: 16px 0 8px;
+
+  .auth-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #3f51b5;
+  }
+
+  h1 {
+    margin: 8px 0 4px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-btn {
+  height: 48px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #666;
+
+  a {
+    color: #3f51b5;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover { text-decoration: underline; }
+  }
+}

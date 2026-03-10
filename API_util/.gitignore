@@ -1,0 +1,7 @@
+target/
+bin/
+.vscode/
+*.log
+logs/
+temp/
+Thumbs.db/

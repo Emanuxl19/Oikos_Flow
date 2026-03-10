@@ -1,0 +1,114 @@
+<div class="form-container">
+
+  <div class="page-header">
+    <div class="back-row">
+      <button mat-icon-button routerLink="/atividades">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ editando ? 'Editar Atividade' : 'Nova Atividade' }}</h1>
+    </div>
+    <button mat-raised-button color="primary" (click)="salvar()" [disabled]="saving">
+      <mat-spinner diameter="18" *ngIf="saving"></mat-spinner>
+      <mat-icon *ngIf="!saving">save</mat-icon>
+      {{ saving ? 'Salvando...' : 'Salvar' }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-center">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <div class="form-layout">
+
+      <!-- Coluna principal -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Informacoes gerais</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="form">
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Titulo *</mat-label>
+              <input matInput formControlName="titulo" placeholder="Ex: Prova de Matematica, Pagar boleto...">
+              <mat-error *ngIf="form.get('titulo')?.hasError('required')">Titulo obrigatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descricao</mat-label>
+              <textarea matInput formControlName="descricao" rows="3"
+                        placeholder="Detalhes, instrucoes ou observacoes..."></textarea>
+            </mat-form-field>
+
+            <div class="row-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Tipo *</mat-label>
+                <mat-select formControlName="tipo">
+                  <mat-option *ngFor="let t of tipos" [value]="t">{{ tipoLabel[t] }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Prioridade</mat-label>
+                <mat-select formControlName="prioridade">
+                  <mat-option *ngFor="let p of prioridades" [value]="p">{{ prioridadeLabel[p] }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option *ngFor="let s of statuses" [value]="s">{{ statusLabel[s] }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Categoria (livre)</mat-label>
+                <input matInput formControlName="categoria" placeholder="Ex: Sessao de estudo, Conta fixа...">
+              </mat-form-field>
+
+              <!-- Materia - so para ESCOLAR -->
+              <mat-form-field appearance="outline" *ngIf="mostrarMateria">
+                <mat-label>Materia</mat-label>
+                <input matInput formControlName="materia" placeholder="Ex: Matematica, Fisica...">
+              </mat-form-field>
+
+              <!-- Valor - so para FINANCEIRO -->
+              <mat-form-field appearance="outline" *ngIf="mostrarValor">
+                <mat-label>Valor (R$)</mat-label>
+                <input matInput type="number" formControlName="valor" placeholder="0,00">
+                <mat-icon matPrefix>attach_money</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="row-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Prazo / Vencimento</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="prazo">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Tempo estimado (min)</mat-label>
+                <input matInput type="number" formControlName="tempoEstimado" placeholder="Ex: 60">
+                <mat-icon matSuffix>timer</mat-icon>
+              </mat-form-field>
+            </div>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Painel de notas (so quando editando) -->
+      <div *ngIf="editando && atividadeId">
+        <app-nota-panel [atividadeId]="atividadeId"></app-nota-panel>
+      </div>
+
+    </div>
+  </ng-container>
+
+</div>

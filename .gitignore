@@ -1,0 +1,26 @@
+# Maven / Java build output
+API_util/target/
+*.class
+*.jar
+*.war
+
+# Logs
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Claude
+.claude/
+
+# Environment / secrets
+*.env
