@@ -1,0 +1,85 @@
+<mat-card class="nota-panel">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>sticky_note_2</mat-icon>
+      Notas e Lembretes
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <!-- Formulario nova nota -->
+    <div class="nova-nota-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nova nota...</mat-label>
+        <textarea matInput
+                  [(ngModel)]="novaNotaConteudo"
+                  rows="2"
+                  placeholder="Escreva uma nota ou lembrete sobre esta atividade...">
+        </textarea>
+      </mat-form-field>
+
+      <div class="lembrete-config" *ngIf="novaNotaLembreteAtivo">
+        <mat-form-field appearance="outline">
+          <mat-label>Data/Hora do lembrete</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="novaNotaLembrete">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="nova-nota-actions">
+        <mat-slide-toggle [(ngModel)]="novaNotaLembreteAtivo" color="primary">
+          <mat-icon>alarm</mat-icon> Definir lembrete
+        </mat-slide-toggle>
+
+        <button mat-raised-button color="primary"
+                (click)="adicionarNota()"
+                [disabled]="!novaNotaConteudo.trim() || adicionando">
+          <mat-icon>add</mat-icon> Adicionar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de notas -->
+    <div class="notas-list">
+      <div *ngIf="notas.length === 0" class="empty-notas">
+        <mat-icon>note_add</mat-icon>
+        <span>Nenhuma nota ainda.</span>
+      </div>
+
+      <div class="nota-item" *ngFor="let nota of notas"
+           [class.com-lembrete]="nota.lembreteAtivo"
+           [class.lembrete-enviado]="nota.lembreteEnviado">
+
+        <div class="nota-conteudo">{{ nota.conteudo }}</div>
+
+        <div class="nota-footer">
+          <span class="nota-data">{{ formatarData(nota.dataCriacao) }}</span>
+
+          <div class="nota-actions">
+            <div class="lembrete-status" *ngIf="nota.lembreteAtivo && nota.dataLembrete">
+              <mat-icon [class.enviado]="nota.lembreteEnviado">
+                {{ nota.lembreteEnviado ? 'alarm_on' : 'alarm' }}
+              </mat-icon>
+              <span>{{ formatarData(nota.dataLembrete) }}</span>
+            </div>
+
+            <button mat-icon-button
+                    [matTooltip]="nota.lembreteAtivo ? 'Desativar lembrete' : 'Ativar lembrete'"
+                    (click)="toggleLembrete(nota)">
+              <mat-icon [color]="nota.lembreteAtivo ? 'primary' : ''">
+                {{ nota.lembreteAtivo ? 'notifications_active' : 'notifications_none' }}
+              </mat-icon>
+            </button>
+
+            <button mat-icon-button color="warn" (click)="deletarNota(nota)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

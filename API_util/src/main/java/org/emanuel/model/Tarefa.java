@@ -1,4 +1,4 @@
-package org.emanuel.model;
+ package org.emanuel.model;
 import jakarta.persistence.*;
 
 @Entity

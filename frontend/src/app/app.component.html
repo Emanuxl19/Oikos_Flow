@@ -1,0 +1,63 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="logo-icon">task_alt</mat-icon>
+      <div>
+        <div class="app-title">Gestor</div>
+        <div class="app-subtitle">de Atividades</div>
+      </div>
+    </div>
+
+    <mat-nav-list>
+      <a mat-list-item
+         *ngFor="let item of navItems"
+         [routerLink]="item.route"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: item.route === '/dashboard'}">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Conteudo principal -->
+  <mat-sidenav-content class="main-content">
+
+    <!-- Header -->
+    <mat-toolbar class="top-toolbar">
+      <span class="spacer"></span>
+
+      <!-- Badge de lembretes -->
+      <button mat-icon-button matTooltip="Lembretes ativos" *ngIf="lembreteCount > 0">
+        <mat-icon [matBadge]="lembreteCount" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Sem lembretes" *ngIf="lembreteCount === 0">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+
+      <!-- Usuario + logout -->
+      <span class="user-name" *ngIf="auth.getUser()">{{ auth.getUser()?.nome }}</span>
+      <button mat-icon-button matTooltip="Sair" (click)="auth.logout()" *ngIf="auth.isLoggedIn()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Pagina atual -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<!-- Toasts de lembrete -->
+<div class="lembrete-overlay">
+  <app-notification-toast
+    *ngFor="let nota of lembretes"
+    [nota]="nota"
+    (dismiss)="dismissLembrete($event)">
+  </app-notification-toast>
+</div>
