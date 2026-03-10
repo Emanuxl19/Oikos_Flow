@@ -2,6 +2,7 @@ package org.emanuel.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,12 @@ public class TelegramService {
     private final ConfiguracaoService configuracaoService;
     private final RestTemplate restTemplate;
 
+    @Value("${telegram.bot.token:}")
+    private String botToken;
+
+    @Value("${telegram.chat.id:}")
+    private String chatId;
+
     public TelegramService(ConfiguracaoService configuracaoService, RestTemplate restTemplate) {
         this.configuracaoService = configuracaoService;
         this.restTemplate = restTemplate;
@@ -27,16 +34,13 @@ public class TelegramService {
 
         if (!config.isLembretesTelegramAtivos()) return false;
 
-        String token = config.getTelegramBotToken();
-        String chatId = config.getTelegramChatId();
-
-        if (token == null || token.isBlank() || chatId == null || chatId.isBlank()) {
-            log.warn("Telegram nao configurado. Defina token e chatId nas configuracoes.");
+        if (botToken == null || botToken.isBlank() || chatId == null || chatId.isBlank()) {
+            log.warn("Telegram padrao nao configurado no ambiente (telegram.bot.token / telegram.chat.id).");
             return false;
         }
 
         try {
-            String url = String.format(TELEGRAM_API, token);
+            String url = String.format(TELEGRAM_API, botToken);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);

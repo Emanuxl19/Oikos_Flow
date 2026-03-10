@@ -27,12 +27,6 @@ public class ConfiguracaoService {
     @Value("${ai.ollama-url:http://localhost:11434}")
     private String defaultOllamaUrl;
 
-    @Value("${telegram.bot.token:}")
-    private String defaultTelegramToken;
-
-    @Value("${telegram.chat.id:}")
-    private String defaultTelegramChatId;
-
     public ConfiguracaoService(ConfiguracaoRepository repo) {
         this.repo = repo;
     }
@@ -48,8 +42,6 @@ public class ConfiguracaoService {
             config.setAiModel(defaultAiModel);
             config.setAiBaseUrl(defaultAiBaseUrl);
             config.setAiOllamaUrl(defaultOllamaUrl);
-            config.setTelegramBotToken(defaultTelegramToken);
-            config.setTelegramChatId(defaultTelegramChatId);
             repo.save(config);
         }
     }

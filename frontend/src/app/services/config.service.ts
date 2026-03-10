@@ -10,8 +10,6 @@ export interface Configuracao {
   aiModel?: string;
   aiBaseUrl?: string;
   aiOllamaUrl?: string;
-  telegramBotToken?: string;
-  telegramChatId?: string;
   lembretesTelegramAtivos?: boolean;
 }
 

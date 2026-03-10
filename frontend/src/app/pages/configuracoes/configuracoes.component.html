@@ -97,23 +97,9 @@
           </mat-slide-toggle>
         </div>
 
-        <div class="fields-grid" *ngIf="config.lembretesTelegramAtivos">
-          <mat-form-field appearance="outline">
-            <mat-label>Bot Token</mat-label>
-            <input matInput
-                   type="password"
-                   [(ngModel)]="config.telegramBotToken"
-                   placeholder="1234567890:ABCDEF...">
-            <mat-hint>Obtenha com o &#64;BotFather no Telegram</mat-hint>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Chat ID</mat-label>
-            <input matInput
-                   [(ngModel)]="config.telegramChatId"
-                   placeholder="Ex: 123456789">
-            <mat-hint>Use &#64;userinfobot para obter seu ID</mat-hint>
-          </mat-form-field>
+        <div class="telegram-standard-info" *ngIf="config.lembretesTelegramAtivos">
+          <mat-icon>info</mat-icon>
+          <span>Bot padrao ativo. Basta deixar esta opcao ligada para receber notificacoes.</span>
         </div>
 
         <div class="test-section" *ngIf="config.lembretesTelegramAtivos">
@@ -124,20 +110,7 @@
             <mat-icon *ngIf="!testando">send</mat-icon>
             {{ testando ? 'Testando...' : 'Testar conexao' }}
           </button>
-          <span class="test-hint">Envia uma mensagem de teste para o chat configurado.</span>
-        </div>
-
-        <div class="telegram-guide" *ngIf="config.lembretesTelegramAtivos">
-          <mat-icon>help_outline</mat-icon>
-          <div>
-            <strong>Como configurar:</strong>
-            <ol>
-              <li>Crie um bot com <strong>&#64;BotFather</strong> e copie o token</li>
-              <li>Inicie uma conversa com seu bot</li>
-              <li>Use <strong>&#64;userinfobot</strong> para obter seu Chat ID</li>
-              <li>Cole os valores acima e salve</li>
-            </ol>
-          </div>
+          <span class="test-hint">Envia uma mensagem de teste usando o bot padrao.</span>
         </div>
 
       </mat-card-content>

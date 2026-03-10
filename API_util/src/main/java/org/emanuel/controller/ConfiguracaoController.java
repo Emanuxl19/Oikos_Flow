@@ -28,6 +28,9 @@ public class ConfiguracaoController {
             config.setAiApiKey("****" + config.getAiApiKey()
                     .substring(config.getAiApiKey().length() - 4));
         }
+        // Telegram e definido no servidor (bot padrao), nao por usuario.
+        config.setTelegramBotToken(null);
+        config.setTelegramChatId(null);
         return config;
     }
 
@@ -38,6 +41,9 @@ public class ConfiguracaoController {
         if (config.getAiApiKey() != null && config.getAiApiKey().startsWith("****")) {
             config.setAiApiKey(atual.getAiApiKey());
         }
+        // Telegram e definido no servidor (bot padrao), nao por usuario.
+        config.setTelegramBotToken(null);
+        config.setTelegramChatId(null);
         service.salvar(config);
         return ResponseEntity.ok(Map.of("mensagem", "Configuracao salva com sucesso"));
     }
@@ -47,7 +53,9 @@ public class ConfiguracaoController {
         boolean ok = telegramService.testarConexao();
         return ResponseEntity.ok(Map.of(
             "sucesso", ok,
-            "mensagem", ok ? "Mensagem enviada com sucesso!" : "Falha ao enviar. Verifique token e chatId."
+            "mensagem", ok
+                    ? "Mensagem enviada com sucesso!"
+                    : "Falha ao enviar. Verifique a configuracao padrao do Telegram no servidor."
         ));
     }
 }
