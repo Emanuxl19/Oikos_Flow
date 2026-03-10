@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(findstr :8080)",
+      "Bash(taskkill /PID 5164 /F)",
+      "Bash(cmd /c \"taskkill /PID 5164 /F\")",
+      "Bash(powershell -Command \"Stop-Process -Id 5164 -Force\")",
+      "Bash(mvn spring-boot:run)",
+      "Skill(commit-commands:commit)",
+      "Skill(commit-commands:commit:*)",
+      "Bash(git reset HEAD -- frontend/)",
+      "Bash(git rm -r --cached frontend/node_modules frontend/.angular API_util/target)",
+      "Bash(grep -n \"localhost:8080\\\\|apiUrl\\\\|environment\" c:/Emanuxl19/API_util/frontend/src/app/services/*.ts)",
+      "Bash(git remote get-url origin)",
+      "Bash(git add frontend/src/environments/environment.prod.ts)",
+      "Bash(git commit:*)",
+      "Bash(gh run view 22915387972 --repo Emanuxl19/Oikos_Flow)",
+      "Bash(npm ci)",
+      "Bash(npm install)",
+      "Bash(npx ng build --configuration production --base-href /Oikos_Flow/)",
+      "Bash(npx angular-cli-ghpages --dir=dist/gestor-atividades/browser)",
+      "Bash(git fetch:*)",
+      "Bash(npx ng:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh run:*)"
+    ]
+  }
+}
