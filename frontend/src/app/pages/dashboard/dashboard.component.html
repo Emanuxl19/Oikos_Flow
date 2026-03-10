@@ -1,74 +1,119 @@
-<div class="dashboard-container">
+<div class="dashboard-page">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Workspace Discovery</p>
+      <h1>Encontre o fluxo ideal para trabalhar, estudar e entregar no prazo.</h1>
+      <p class="hero-sub">
+        Navegue por atividades como um catalogo inteligente: busca central, filtros rapidos e comparacao visual em um unico painel.
+      </p>
 
-  <div class="page-header">
-    <h1>Dashboard</h1>
-    <button mat-raised-button color="primary" routerLink="/atividades/nova">
-      <mat-icon>add</mat-icon> Nova Atividade
-    </button>
-  </div>
+      <div class="hero-search">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          placeholder="Buscar cidade, bairro, projeto ou atividade"
+          [value]="quickQuery"
+          (input)="quickQuery = $any($event.target).value">
+        <button mat-raised-button color="primary" routerLink="/atividades/nova">
+          Encontrar espaco
+        </button>
+      </div>
+
+      <div class="city-suggestions">
+        <button *ngFor="let city of citySuggestions" type="button" (click)="applySuggestion(city)">
+          {{ city }}
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-preview">
+      <div class="map-tile map-lg">
+        <div class="map-title">Mapa de disponibilidade</div>
+        <div class="map-grid"></div>
+      </div>
+      <div class="preview-stack">
+        <div class="map-tile">
+          <span>Wi-Fi rapido</span>
+          <strong>97%</strong>
+        </div>
+        <div class="map-tile">
+          <span>Salas privadas</span>
+          <strong>42 ativas</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters">
+    <div class="section-head">
+      <h2>Filtros principais</h2>
+      <span>descoberta instantanea</span>
+    </div>
+    <div class="filter-rail">
+      <button
+        *ngFor="let filter of filterOptions"
+        type="button"
+        class="filter-chip"
+        [class.active]="activeFilters.has(filter)"
+        (click)="toggleFilter(filter)">
+        {{ filter }}
+      </button>
+    </div>
+  </section>
 
   <div *ngIf="loading" class="loading-center">
     <mat-spinner diameter="48"></mat-spinner>
   </div>
 
   <ng-container *ngIf="!loading && stats">
+    <section class="stats-rail">
+      <article class="stat-card" *ngFor="let card of statCards">
+        <div class="stat-top">
+          <span>{{ card.label }}</span>
+          <mat-icon>{{ card.icon }}</mat-icon>
+        </div>
+        <div class="stat-value">{{ card.value }}</div>
+        <div class="stat-delta">{{ card.delta }}</div>
+      </article>
+    </section>
 
-    <!-- Cards de resumo -->
-    <div class="stats-grid">
-      <mat-card class="stat-card total">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.totalAtividades }}</div>
-          <div class="stat-label">Total</div>
-          <mat-icon class="stat-icon">assignment</mat-icon>
-        </mat-card-content>
-      </mat-card>
+    <section class="results">
+      <div class="section-head">
+        <h2>Espacos e tarefas recomendadas</h2>
+        <a routerLink="/atividades">Ver todas</a>
+      </div>
 
-      <mat-card class="stat-card pendentes">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.pendentes }}</div>
-          <div class="stat-label">Pendentes</div>
-          <mat-icon class="stat-icon">pending_actions</mat-icon>
-        </mat-card-content>
-      </mat-card>
+      <div class="results-rail">
+        <article
+          class="result-card"
+          *ngFor="let atividade of stats.proximasAtividades"
+          [routerLink]="['/atividades', atividade.id, 'editar']">
+          <div class="result-cover" [ngClass]="'type-' + atividade.tipo.toLowerCase()">
+            <span>{{ tipoLabel[atividade.tipo] }}</span>
+            <strong>{{ atividade.status ? statusLabel[atividade.status] : 'Pendente' }}</strong>
+          </div>
+          <div class="result-body">
+            <h3>{{ atividade.titulo }}</h3>
+            <p>{{ atividade.descricao || 'Sem descricao detalhada. Abra para editar e concluir mais rapido.' }}</p>
+            <div class="tag-row">
+              <span class="chip" [ngClass]="'chip-' + atividade.prioridade">{{ prioridadeLabel[atividade.prioridade] }}</span>
+              <span class="chip" [ngClass]="'chip-' + atividade.tipo">{{ tipoLabel[atividade.tipo] }}</span>
+            </div>
+            <div class="result-footer">
+              <span *ngIf="atividade.prazo"><mat-icon>schedule</mat-icon>{{ prazoRelativo(atividade.prazo) }}</span>
+              <span *ngIf="!atividade.prazo"><mat-icon>event_busy</mat-icon>Sem prazo</span>
+              <button mat-stroked-button type="button">Reservar foco</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-      <mat-card class="stat-card atrasadas">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.atrasadas }}</div>
-          <div class="stat-label">Atrasadas</div>
-          <mat-icon class="stat-icon">warning_amber</mat-icon>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card hoje">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.hoje }}</div>
-          <div class="stat-label">Vencem Hoje</div>
-          <mat-icon class="stat-icon">today</mat-icon>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card concluidas">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.concluidas }}</div>
-          <div class="stat-label">Concluidas</div>
-          <mat-icon class="stat-icon">check_circle</mat-icon>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card lembretes" *ngIf="stats.lembretesPendentes > 0">
-        <mat-card-content>
-          <div class="stat-value">{{ stats.lembretesPendentes }}</div>
-          <div class="stat-label">Lembretes</div>
-          <mat-icon class="stat-icon">notifications_active</mat-icon>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <!-- Graficos -->
-    <div class="charts-grid">
+    <section class="analytics-grid">
       <mat-card class="chart-card">
         <mat-card-header>
-          <mat-card-title>Por Tipo</mat-card-title>
+          <mat-card-title>Distribuicao por tipo</mat-card-title>
+          <mat-card-subtitle>Visao macro do fluxo atual</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="chart-wrapper">
@@ -79,7 +124,8 @@
 
       <mat-card class="chart-card">
         <mat-card-header>
-          <mat-card-title>Por Prioridade</mat-card-title>
+          <mat-card-title>Prioridade operacional</mat-card-title>
+          <mat-card-subtitle>Concentracao por criticidade</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="chart-wrapper">
@@ -87,33 +133,45 @@
           </div>
         </mat-card-content>
       </mat-card>
-    </div>
+    </section>
 
-    <!-- Proximas atividades -->
-    <mat-card class="proximas-card" *ngIf="stats.proximasAtividades.length > 0">
-      <mat-card-header>
-        <mat-card-title>Proximas Atividades</mat-card-title>
-        <mat-card-subtitle>Pendentes com prazo definido</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="atividade-row" *ngFor="let a of stats.proximasAtividades"
-             [routerLink]="['/atividades', a.id, 'editar']">
-          <div class="atividade-info">
-            <div class="atividade-titulo">{{ a.titulo }}</div>
-            <div class="atividade-meta">
-              <span class="chip" [ngClass]="'chip-' + a.tipo">{{ tipoLabel[a.tipo] }}</span>
-              <span class="chip" [ngClass]="'chip-' + a.prioridade">{{ prioridadeLabel[a.prioridade] }}</span>
-              <span *ngIf="a.materia" class="materia-tag">{{ a.materia }}</span>
+    <section class="insight-grid">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Pipeline de execucao</mat-card-title>
+          <mat-card-subtitle>Visao rapida de conversao das tarefas</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="pipeline-row" *ngFor="let row of workflowRows">
+            <div class="pipeline-meta">
+              <span>{{ row.label }}</span>
+              <strong>{{ row.value }}</strong>
+            </div>
+            <div class="pipeline-bar">
+              <span [style.width.%]="row.percent" [style.background]="row.color"></span>
             </div>
           </div>
-          <div class="prazo-info" *ngIf="a.prazo">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ prazoRelativo(a.prazo) }}</span>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Proximos prazos</mat-card-title>
+          <mat-card-subtitle>Roteiro de entrega prioritario</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="timeline-item" *ngFor="let atividade of stats.proximasAtividades">
+            <div class="timeline-dot"></div>
+            <div>
+              <div class="timeline-title">{{ atividade.titulo }}</div>
+              <div class="timeline-meta">
+                <span>{{ atividade.materia || tipoLabel[atividade.tipo] }}</span>
+                <span *ngIf="atividade.prazo">{{ prazoRelativo(atividade.prazo) }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
+        </mat-card-content>
+      </mat-card>
+    </section>
   </ng-container>
-
 </div>

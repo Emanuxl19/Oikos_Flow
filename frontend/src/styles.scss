@@ -1,85 +1,156 @@
+:root {
+  --bg-0: #0f172a;
+  --bg-1: #111c33;
+  --bg-2: #1e293b;
+  --surface: rgba(23, 34, 57, 0.72);
+  --surface-strong: rgba(20, 31, 52, 0.9);
+  --border: rgba(148, 163, 184, 0.22);
+  --text: #e2e8f0;
+  --muted: #93a3bf;
+  --primary: #22d3ee;
+  --secondary: #6366f1;
+  --success: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
-  height: 100%;
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background: #f4f6f9;
-  color: #1a1a2e;
+html,
+body {
+  min-height: 100%;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1100px 600px at 15% -10%, rgba(99, 102, 241, 0.28), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(34, 211, 238, 0.2), transparent 65%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, #0b1428);
 }
 
-// ===== Scrollbar customizada =====
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #c5c5c5; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #9e9e9e; }
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.02em;
+}
 
-// ===== Utilitarios =====
-.text-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+a {
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(180deg, #334155, #475569);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #475569, #64748b);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
-  border-radius: 12px;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: #d5e4ff;
+  background: rgba(30, 41, 59, 0.75);
 }
 
-// ===== Chips de Prioridade =====
-.chip-URGENTE  { background: #ffebee; color: #c62828; }
-.chip-ALTA     { background: #fff3e0; color: #e65100; }
-.chip-MEDIA    { background: #e3f2fd; color: #1565c0; }
-.chip-BAIXA    { background: #e8f5e9; color: #2e7d32; }
+.chip-URGENTE,
+.chip-ALTA {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(127, 29, 29, 0.32);
+}
 
-// ===== Chips de Tipo =====
-.chip-ESCOLAR    { background: #ede7f6; color: #4527a0; }
-.chip-FINANCEIRO { background: #e0f2f1; color: #00695c; }
-.chip-GERAL      { background: #f3e5f5; color: #6a1b9a; }
+.chip-MEDIA {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(120, 53, 15, 0.35);
+}
 
-// ===== Chips de Status =====
-.chip-PENDENTE     { background: #fff9c4; color: #f57f17; }
-.chip-EM_ANDAMENTO { background: #e3f2fd; color: #0d47a1; }
-.chip-CONCLUIDA    { background: #e8f5e9; color: #1b5e20; }
-.chip-CANCELADA    { background: #fafafa; color: #757575; }
+.chip-BAIXA,
+.chip-CONCLUIDA {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(5, 83, 65, 0.38);
+}
 
-// ===== Cards Material =====
+.chip-ESCOLAR,
+.chip-EM_ANDAMENTO {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(49, 46, 129, 0.38);
+}
+
+.chip-FINANCEIRO {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: rgba(8, 47, 73, 0.4);
+}
+
+.chip-GERAL,
+.chip-PENDENTE,
+.chip-CANCELADA {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.8);
+}
+
 mat-card {
-  border-radius: 12px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-  transition: box-shadow 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
-  }
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border);
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 16px 38px rgba(2, 8, 23, 0.42) !important;
+  backdrop-filter: blur(10px);
 }
 
-// ===== Botoes =====
 .mat-mdc-raised-button.mat-primary {
-  background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%) !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  color: #061322 !important;
+  background: linear-gradient(135deg, var(--primary), #67e8f9) !important;
 }
 
-// ===== Snackbar =====
-.snack-success .mdc-snackbar__surface {
-  background: #2e7d32 !important;
-  color: white !important;
+.mat-mdc-stroked-button {
+  border-radius: 12px !important;
 }
 
-.snack-error .mdc-snackbar__surface {
-  background: #c62828 !important;
-  color: white !important;
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__trailing,
+.mat-mdc-form-field .mdc-notched-outline__notch {
+  border-color: rgba(148, 163, 184, 0.3) !important;
 }
 
-// ===== Lembrete toast =====
+.mat-mdc-snack-bar-container.snack-success .mdc-snackbar__surface {
+  background: #064e3b !important;
+  color: #d1fae5 !important;
+}
+
+.mat-mdc-snack-bar-container.snack-error .mdc-snackbar__surface {
+  background: #7f1d1d !important;
+  color: #fee2e2 !important;
+}
+
 .lembrete-overlay {
   position: fixed;
   top: 20px;

@@ -1,59 +1,81 @@
-<mat-sidenav-container class="sidenav-container">
-
-  <!-- Sidebar -->
-  <mat-sidenav mode="side" opened class="sidenav">
-    <div class="sidenav-header">
-      <mat-icon class="logo-icon">task_alt</mat-icon>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <mat-icon>rocket_launch</mat-icon>
+      </div>
       <div>
-        <div class="app-title">Gestor</div>
-        <div class="app-subtitle">de Atividades</div>
+        <div class="brand-title">Oikos Flow</div>
+        <div class="brand-subtitle">Workspace Intelligence</div>
       </div>
     </div>
 
-    <mat-nav-list>
-      <a mat-list-item
-         *ngFor="let item of navItems"
-         [routerLink]="item.route"
-         routerLinkActive="active-link"
-         [routerLinkActiveOptions]="{exact: item.route === '/dashboard'}">
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
+    <nav class="menu">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+        class="menu-link">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
       </a>
-    </mat-nav-list>
-  </mat-sidenav>
+    </nav>
 
-  <!-- Conteudo principal -->
-  <mat-sidenav-content class="main-content">
+    <button mat-raised-button color="primary" routerLink="/atividades/nova" class="sidebar-cta">
+      <mat-icon>add</mat-icon>
+      Encontrar espaco
+    </button>
+  </aside>
 
-    <!-- Header -->
-    <mat-toolbar class="top-toolbar">
-      <span class="spacer"></span>
+  <main class="workspace">
+    <header class="topbar">
+      <div class="searchbox">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          placeholder="Buscar espacos, atividades ou localizacoes..."
+          [value]="quickSearch"
+          (input)="quickSearch = $any($event.target).value">
+      </div>
 
-      <!-- Badge de lembretes -->
-      <button mat-icon-button matTooltip="Lembretes ativos" *ngIf="lembreteCount > 0">
-        <mat-icon [matBadge]="lembreteCount" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Sem lembretes" *ngIf="lembreteCount === 0">
-        <mat-icon>notifications_none</mat-icon>
-      </button>
+      <div class="top-actions">
+        <button mat-icon-button matTooltip="Lembretes ativos" *ngIf="lembreteCount > 0">
+          <mat-icon [matBadge]="lembreteCount" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Sem lembretes" *ngIf="lembreteCount === 0">
+          <mat-icon>notifications_none</mat-icon>
+        </button>
 
-      <!-- Usuario + logout -->
-      <span class="user-name" *ngIf="auth.getUser()">{{ auth.getUser()?.nome }}</span>
-      <button mat-icon-button matTooltip="Sair" (click)="auth.logout()" *ngIf="auth.isLoggedIn()">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </mat-toolbar>
+        <div class="user-pill" *ngIf="auth.getUser()">
+          <mat-icon>person</mat-icon>
+          <span>{{ auth.getUser()?.nome }}</span>
+        </div>
 
-    <!-- Pagina atual -->
-    <div class="page-content">
+        <button mat-icon-button matTooltip="Sair" (click)="auth.logout()" *ngIf="auth.isLoggedIn()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </header>
+
+    <section class="quick-nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="quick-active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+        class="quick-chip">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    </section>
+
+    <section class="page-content">
       <router-outlet></router-outlet>
-    </div>
+    </section>
+  </main>
+</div>
 
-  </mat-sidenav-content>
-
-</mat-sidenav-container>
-
-<!-- Toasts de lembrete -->
 <div class="lembrete-overlay">
   <app-notification-toast
     *ngFor="let nota of lembretes"

@@ -1,9 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,9 +21,6 @@ import { AuthService } from './services/auth.service';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
     MatIconModule,
     MatBadgeModule,
     MatButtonModule,
@@ -38,6 +32,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   lembretes: Nota[] = [];
+  quickSearch = '';
   private pollSub?: Subscription;
 
   navItems = [
