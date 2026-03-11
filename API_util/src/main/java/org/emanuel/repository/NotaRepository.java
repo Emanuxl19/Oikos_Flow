@@ -10,6 +10,8 @@ public interface NotaRepository extends JpaRepository<Nota, Long> {
 
     List<Nota> findByAtividadeIdOrderByDataCriacaoDesc(Long atividadeId);
 
+    List<Nota> findByLembreteAtivoTrueAndLembreteEnviadoFalse();
+
     List<Nota> findTop20ByLembreteAtivoTrueAndLembreteEnviadoFalseAndDataLembreteLessThanEqualOrderByDataLembreteAsc(
             LocalDateTime agora
     );

@@ -14,6 +14,13 @@ frontend/.angular/cache/
 .idea/
 *.iml
 
+# Gradle / Android
+.gradle/
+.android/
+build/
+*.apk
+*.aar
+
 # Logs
 *.log
 hs_err_pid*.log
