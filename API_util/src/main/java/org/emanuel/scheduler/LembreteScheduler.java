@@ -26,7 +26,10 @@ public class LembreteScheduler {
 
     @Scheduled(fixedDelayString = "${app.lembrete.intervalo-ms:60000}")
     public void verificarLembretes() {
-        List<Nota> vencidos = notaRepo.findLembretesVencidos(LocalDateTime.now());
+        List<Nota> vencidos = notaRepo
+                .findTop50ByLembreteAtivoTrueAndLembreteEnviadoFalseAndDataLembreteLessThanEqualOrderByDataLembreteAsc(
+                        LocalDateTime.now()
+                );
 
         if (vencidos.isEmpty()) return;
 

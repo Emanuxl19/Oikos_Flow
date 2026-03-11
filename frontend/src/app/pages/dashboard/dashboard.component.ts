@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -28,7 +28,7 @@ Chart.register(...registerables);
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tipoChart')      tipoChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('prioridadeChart') prioridadeChartRef!: ElementRef<HTMLCanvasElement>;
 
@@ -53,6 +53,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {}
+
+  ngOnDestroy() {
+    this.tipoChart?.destroy();
+    this.prioridadeChart?.destroy();
+  }
 
   carregarStats() {
     this.loading = true;

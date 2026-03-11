@@ -7,6 +7,7 @@ import org.emanuel.repository.NotaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -57,6 +58,8 @@ public class NotaController {
     // Lembretes ativos nao enviados — frontend faz polling aqui
     @GetMapping("/notas/lembretes")
     public List<Nota> lembretesAtivos() {
-        return notaRepo.findByLembreteAtivoTrueAndLembreteEnviadoFalse();
+        return notaRepo.findTop20ByLembreteAtivoTrueAndLembreteEnviadoFalseAndDataLembreteLessThanEqualOrderByDataLembreteAsc(
+                LocalDateTime.now()
+        );
     }
 }

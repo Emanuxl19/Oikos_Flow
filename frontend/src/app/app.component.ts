@@ -31,6 +31,8 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private static readonly POLL_INTERVAL_MS = 120000;
+
   lembretes: Nota[] = [];
   quickSearch = '';
   private pollSub?: Subscription;
@@ -46,19 +48,22 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private notaService: NotaService, public auth: AuthService) {}
 
   ngOnInit() {
-    // Polling de lembretes a cada 30 segundos
-    this.pollSub = interval(30000).pipe(
-      switchMap(() => this.notaService.getLembretesAtivos().pipe(
+    // Polling leve de lembretes (2 min) apenas com sessao ativa.
+    this.pollSub = interval(AppComponent.POLL_INTERVAL_MS).pipe(
+      switchMap(() => (this.auth.isLoggedIn() ? this.notaService.getLembretesAtivos() : of([])).pipe(
         catchError(() => of([]))
       ))
     ).subscribe(notas => {
       this.lembretes = notas;
     });
 
-    // Verifica imediatamente ao iniciar
-    this.notaService.getLembretesAtivos().subscribe({
-      next: notas => this.lembretes = notas,
-      error: () => {}
+    // Verifica imediatamente ao iniciar somente se estiver autenticado.
+    if (!this.auth.isLoggedIn()) return;
+
+    this.notaService.getLembretesAtivos().pipe(
+      catchError(() => of([]))
+    ).subscribe(notas => {
+      this.lembretes = notas;
     });
   }
 
