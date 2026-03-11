@@ -40,7 +40,7 @@ public class DashboardController {
         long concluidas = atividadeRepo.countByStatus(StatusAtividade.CONCLUIDA);
         long atrasadas  = atividadeRepo.findAtrasadas(agora).size();
         long hoje       = atividadeRepo.findHoje(inicioDia, fimDia).size();
-        long lembretes  = notaRepo.findByLembreteAtivoTrueAndLembreteEnviadoFalse().size();
+        long lembretes  = notaRepo.countByLembreteAtivoTrueAndLembreteEnviadoFalse();
 
         Map<String, Long> porTipo = new LinkedHashMap<>();
         for (TipoAtividade tipo : TipoAtividade.values()) {
