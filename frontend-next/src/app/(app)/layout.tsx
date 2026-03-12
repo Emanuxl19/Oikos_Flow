@@ -36,8 +36,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-[var(--bg-primary)]">
-        <Spinner className="w-8 h-8" />
+      <div className="flex h-screen items-center justify-center bg-[var(--bg-primary)]">
+        <Spinner className="h-8 w-8" />
       </div>
     )
   }
@@ -45,14 +45,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!isLoggedIn) return null
 
   return (
-    <div className="flex h-screen bg-[var(--bg-primary)] bg-mesh-dark dark:bg-mesh-dark">
-      <Sidebar />
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <Topbar lembreteCount={lembretes.length} />
-        <div className="flex-1 overflow-y-auto p-6">
-          {children}
+    <div className="app-shell min-h-screen bg-mesh-dark dark:bg-mesh-dark">
+      <div className="relative z-10 flex min-h-screen gap-4 p-4 lg:gap-6 lg:p-6">
+        <Sidebar />
+        <div className="flex min-w-0 flex-1 flex-col gap-5 lg:gap-6">
+          <Topbar lembreteCount={lembretes.length} />
+          <main className="min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="pb-10">{children}</div>
+          </main>
         </div>
-      </main>
+      </div>
       <ToastContainer />
       <NotificationToast lembretes={lembretes} onDismiss={dismissLembrete} />
     </div>

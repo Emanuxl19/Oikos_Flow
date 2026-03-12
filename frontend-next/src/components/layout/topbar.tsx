@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, LogOut, Search } from 'lucide-react'
+import { Bell, LogOut, Search, Sparkles } from 'lucide-react'
 import { useAuth } from '@/providers/auth-provider'
 import { ThemeToggle } from './theme-toggle'
 
@@ -12,49 +12,62 @@ export function Topbar({ lembreteCount = 0 }: TopbarProps) {
   const { user, logout } = useAuth()
 
   return (
-    <header className="h-16 border-b border-[var(--border)] bg-[var(--bg-secondary)] flex items-center justify-between px-6">
-      {/* Search */}
-      <div className="relative w-72">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
-        <input
-          type="text"
-          placeholder="Buscar..."
-          className="w-full h-9 pl-10 pr-4 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-primary transition-colors"
-        />
-      </div>
+    <header className="glass-card-strong relative overflow-hidden px-4 py-4 sm:px-5 sm:py-5">
+      <div className="pointer-events-none absolute -left-10 top-0 h-28 w-28 rounded-full bg-primary/15 blur-3xl" />
 
-      {/* Actions */}
-      <div className="flex items-center gap-3">
-        {/* Notifications */}
-        <button className="relative w-9 h-9 rounded-xl flex items-center justify-center hover:bg-[var(--bg-tertiary)] transition-colors">
-          <Bell className="w-4 h-4 text-[var(--text-secondary)]" />
-          {lembreteCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-gradient-primary text-[10px] text-white font-bold flex items-center justify-center">
-              {lembreteCount > 9 ? '9+' : lembreteCount}
-            </span>
-          )}
-        </button>
-
-        <ThemeToggle />
-
-        {/* User */}
-        {user && (
-          <div className="flex items-center gap-2 h-9 px-3 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border)]">
-            <div className="w-6 h-6 rounded-full bg-gradient-primary flex items-center justify-center text-xs text-white font-bold">
-              {user.nome.charAt(0).toUpperCase()}
+      <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="section-kicker mb-3">Workspace pulse</div>
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+            <div className="relative min-w-0 flex-1 lg:max-w-xl">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+              <input
+                type="text"
+                placeholder="Buscar por atividade, nota ou categoria..."
+                className="h-12 w-full rounded-[18px] border border-white/10 bg-white/[0.04] pl-11 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-primary focus:outline-none"
+              />
             </div>
-            <span className="text-sm font-medium text-[var(--text-primary)]">{user.nome}</span>
+            <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary)]">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              {lembreteCount > 0 ? `${lembreteCount} lembretes ativos` : 'Fluxo monitorado'}
+            </div>
           </div>
-        )}
+        </div>
 
-        {/* Logout */}
-        <button
-          onClick={logout}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors"
-          title="Sair"
-        >
-          <LogOut className="w-4 h-4" />
-        </button>
+        <div className="flex flex-wrap items-center justify-between gap-3 xl:justify-end">
+          <button className="relative flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-white/[0.04] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
+            <Bell className="h-4 w-4" />
+            {lembreteCount > 0 && (
+              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-primary px-1 text-[10px] font-bold text-[#171310]">
+                {lembreteCount > 9 ? '9+' : lembreteCount}
+              </span>
+            )}
+          </button>
+
+          <ThemeToggle />
+
+          {user && (
+            <div className="flex min-w-0 items-center gap-3 rounded-[22px] border border-white/10 bg-white/[0.04] px-3 py-2">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-gradient-primary text-sm font-bold text-[#171310]">
+                {user.nome.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{user.nome}</p>
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[var(--text-muted)]">
+                  Workspace owner
+                </p>
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={logout}
+            className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-white/[0.04] text-[var(--text-muted)] transition-colors hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-300"
+            title="Sair"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </header>
   )
